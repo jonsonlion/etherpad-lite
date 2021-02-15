@@ -15,14 +15,6 @@ jobs:
       with:
         node-version: 12
 
-    - name: Run sauce-connect-action
-      shell: bash
-      env:
-        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        TRAVIS_JOB_NUMBER: ${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}
-      run: src/tests/frontend/travis/sauce_tunnel.sh
-
     - name: Install all dependencies and symlink for ep_etherpad-lite
       run: src/bin/installDeps.sh
 
@@ -32,6 +24,14 @@ jobs:
 
     - name: Write custom settings.json with loglevel WARN
       run: "sed 's/\"loglevel\": \"INFO\",/\"loglevel\": \"WARN\",/' < settings.json.template > settings.json"
+
+    - name: Run sauce-connect-action
+      shell: bash
+      env:
+        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        TRAVIS_JOB_NUMBER: ${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}
+      run: src/tests/frontend/travis/sauce_tunnel.sh
 
     - name: Run the frontend tests
       shell: bash
@@ -54,14 +54,6 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: 12
-
-    - name: Run sauce-connect-action
-      shell: bash
-      env:
-        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        TRAVIS_JOB_NUMBER: ${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}
-      run: src/tests/frontend/travis/sauce_tunnel.sh
 
     - name: Install Etherpad plugins
       run: >
@@ -106,6 +98,14 @@ jobs:
       # XXX we should probably run all tests, because plugins could effect their results
     - name: Remove standard frontend test files, so only plugin tests are run
       run: rm src/tests/frontend/specs/*
+
+    - name: Run sauce-connect-action
+      shell: bash
+      env:
+        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        TRAVIS_JOB_NUMBER: ${{ github.run_id }}-${{ github.run_number }}-${{ github.job }}
+      run: src/tests/frontend/travis/sauce_tunnel.sh
 
     - name: Run the frontend tests
       shell: bash
