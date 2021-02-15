@@ -6,6 +6,7 @@ const hooks = require('./hooks');
 const npm = require('npm');
 const request = require('request');
 const util = require('util');
+const settings = require('../../../node/utils/Settings');
 
 let npmIsLoaded = false;
 const loadNpm = async () => {
@@ -15,8 +16,10 @@ const loadNpm = async () => {
   npm.on('log', log4js.getLogger('npm').log);
 };
 
-const onAllTasksFinished = () => {
-  hooks.aCallAll('restartServer', {}, () => {});
+const onAllTasksFinished = async () => {
+  settings.reloadSettings();
+  await hooks.aCallAll('loadSettings', {settings});
+  await hooks.aCallAll('restartServer');
 };
 
 let tasks = 0;

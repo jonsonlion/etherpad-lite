@@ -784,6 +784,11 @@ exports.reloadSettings = () => {
     // using Unix socket for connectivity
     console.warn('The settings file contains an empty string ("") for the "ip" parameter. The "port" parameter will be interpreted as the path to a Unix socket to bind at.');
   }
+
+  // regenerate randomVersionString so clients get a fresh plugin-definition.json after plugin
+  // install/uninstall. This also means that most of the resources are rerequested on reload and
+  // plugin installation.
+  exports.randomVersionString = randomString(4);
 };
 
 // initially load settings
