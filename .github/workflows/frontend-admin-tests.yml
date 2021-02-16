@@ -28,7 +28,11 @@ jobs:
 
       # We intentionally install a much old ep_align version to test update minor versions
     - name: Install etherpad plugins
-      run: npm install ep_align@0.2.27
+      run: >
+        npm_version=$(npm --version) || exit 1;
+        npm_major=${npm_version%%.*};
+        [ $npm_major -lt 7 ] && flags= || flags=--legacy-peer-deps;
+        npm install --no-save $flags ep_align@0.2.27
 
       # Nuke plugin tests
     - name: Install etherpad plugins

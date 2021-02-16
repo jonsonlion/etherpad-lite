@@ -52,7 +52,10 @@ jobs:
 
     - name: Install etherpad plugins
       run: >
-        npm install
+        npm_version=$(npm --version) || exit 1;
+        npm_major=${npm_version%%.*};
+        [ $npm_major -lt 7 ] && flags= || flags=--legacy-peer-deps;
+        npm install --no-save $flags
         ep_align
         ep_author_hover
         ep_cursortrace
